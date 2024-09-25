@@ -2,7 +2,7 @@ import { Response, Request } from "express"
 import Song from "../../models/songs.model"
 import Topic from "../../models/topic.model"
 import Singer from "../../models/singer.model"
-
+import FavoriteSong from "../../models/favorite-song.model"
 export const list=async(req:Request,res:Response)=>{
 
     const slugTopic:string=req.params.slugTopic
@@ -46,6 +46,13 @@ export const detail=async(req:Request,res:Response)=>{
      const topic=await Topic.findOne({
         _id:detail.topicId
      }).select(`title`)
+     const checkFavor=await FavoriteSong.findOne({
+        songId:detail.id
+        // userId:res.locals.user.id
+     })
+     if(checkFavor){
+        detail[`isFavorite`]=true
+     }
     res.render('client/pages/songs/detail',{
         pagetitle:`song detail`,
         song:detail,
@@ -91,4 +98,32 @@ export const like=async(req:Request,res:Response)=>{
         })
     
     }
+}
+
+export const favorite=async(req:Request,res:Response)=>{
+    const {id}=req.body
+    const data={
+         // userId:res.locals.user.id,
+        songId:id,
+    }
+    const exist= await FavoriteSong.findOne({
+        // userId:res.locals.user.id,
+        songId:id,
+    })
+    let status:string="check"
+    if(exist){
+        await FavoriteSong.deleteOne({
+          // userId:res.locals.user.id,
+            songId:id,
+        })
+          status="delete"
+    }else{
+        const record =new FavoriteSong(data)
+       await record.save()
+       status="add"
+    }
+    res.json({
+        code:200,
+        check:status
+    })
 }

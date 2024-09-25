@@ -66,3 +66,31 @@ if(buttonLike){
 
     })
 }
+
+
+const buttonFavo=document.querySelector('[button-favorite]')
+if(buttonFavo){
+    buttonFavo.addEventListener('click',()=>{
+        const id=buttonFavo.getAttribute('button-favorite')
+        const data={
+            id:id,
+        }
+        fetch("/songs/favorite", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+          })
+            .then(res=>res.json())
+            .then(data=>{
+                if(buttonFavo.classList.contains('active') && data.check=="delete"){
+                    buttonFavo.classList.remove('active')   
+                }else{
+                    buttonFavo.classList.add('active')
+                }
+            })
+        
+
+    })
+}
