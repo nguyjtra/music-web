@@ -2,6 +2,9 @@ import express,{Express,Request,Response } from "express";
 
 import dotenv from "dotenv";
 
+var bodyParser = require('body-parser')
+
+
 import {connectDatabase} from "./config/database"
 dotenv.config();
 connectDatabase();
@@ -13,6 +16,13 @@ import { routeApi } from "./routes/client/index.route";
 const app:Express=express();
 
 const port:number|string=process.env.PORT||3000;
+
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(express.static('public'))
 
