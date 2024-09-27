@@ -68,10 +68,12 @@ if(buttonLike){
 }
 
 
-const buttonFavo=document.querySelector('[button-favorite]')
-if(buttonFavo){
+const ListbuttonFavo=document.querySelectorAll('[button-favorite]')
+if(ListbuttonFavo.length>0){
+    ListbuttonFavo.forEach((buttonFavo)=>{
     buttonFavo.addEventListener('click',()=>{
         const id=buttonFavo.getAttribute('button-favorite')
+        console.log(id)
         const data={
             id:id,
         }
@@ -90,6 +92,7 @@ if(buttonFavo){
                     buttonFavo.classList.add('active')
                 }
             })
+        })
         
 
     })

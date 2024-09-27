@@ -3,6 +3,7 @@ import Song from "../../models/songs.model"
 import Topic from "../../models/topic.model"
 import Singer from "../../models/singer.model"
 import FavoriteSong from "../../models/favorite-song.model"
+import unidecode from "unidecode"
 export const list=async(req:Request,res:Response)=>{
 
     const slugTopic:string=req.params.slugTopic
@@ -125,5 +126,59 @@ export const favorite=async(req:Request,res:Response)=>{
     res.json({
         code:200,
         check:status
+    })
+}
+
+export const listFavorite=async(req:Request,res:Response)=>{
+
+    let list=await FavoriteSong.find({
+        // userId:res.locals.user.id
+    })
+    for( let item of list){
+      item[`infoSong`]=await Song.findOne({
+            _id:item.songId
+    }).select("avatar slug title singerId")
+
+        item[`infoSinger`]=await Singer.findOne({
+            _id:item[`infoSong`].singerId
+        }).select("fullName")
+}
+    res.render('client/pages/songs/favorite',{
+        pagetitle:"Favorite song",
+        songs:list
+
+    })
+}
+
+export const sreach=async(req:Request,res:Response)=>{
+    const keyword=`${req.query.keyword}`
+    keyword.trim()
+   let keywordSlug=keyword.replace(/\s/g,"-")
+    keywordSlug=keyword.replace(/\s+/g,"-")
+    keywordSlug=unidecode(keywordSlug)
+    const regexA=new RegExp(keyword,"i")
+    const regexB=new RegExp(keywordSlug,"i")
+    let song=[];
+    if(keyword){
+     song= await Song.find({
+        deleted:false,
+        $or:[
+            {title: regexA},
+            {slug: regexB}
+        ],
+        status:"active"
+    }).select("title avatar singerId like slug")
+
+    for(const item of song){
+        const singerName=await Singer.findOne({
+            _id:item.singerId
+        }).select("fullName")
+         item[`singerFullName`]=singerName[`fullName`]
+    }
+}
+
+    res.render("client/pages/songs/list",{
+        pageTitle:`Result for ${keyword}`,
+        songs:song,
     })
 }
