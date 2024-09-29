@@ -12,6 +12,6 @@ router.patch('/favorite',controller.favorite)
 
 router.get('/listFavorite',controller.listFavorite)
 
-router.get('/search/result',controller.sreach)
+router.get('/search/:type',controller.sreach)
 
 export const songRoute=router

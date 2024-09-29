@@ -4,6 +4,7 @@ import Topic from "../../models/topic.model"
 import Singer from "../../models/singer.model"
 import FavoriteSong from "../../models/favorite-song.model"
 import unidecode from "unidecode"
+import { title } from "process"
 export const list=async(req:Request,res:Response)=>{
 
     const slugTopic:string=req.params.slugTopic
@@ -151,6 +152,8 @@ export const listFavorite=async(req:Request,res:Response)=>{
 }
 
 export const sreach=async(req:Request,res:Response)=>{
+    const type=req.params.type;
+
     const keyword=`${req.query.keyword}`
     keyword.trim()
    let keywordSlug=keyword.replace(/\s/g,"-")
@@ -158,9 +161,11 @@ export const sreach=async(req:Request,res:Response)=>{
     keywordSlug=unidecode(keywordSlug)
     const regexA=new RegExp(keyword,"i")
     const regexB=new RegExp(keywordSlug,"i")
-    let song=[];
+    
+    let songSuggest=[]
+    //searching
     if(keyword){
-     song= await Song.find({
+    const song= await Song.find({
         deleted:false,
         $or:[
             {title: regexA},
@@ -173,12 +178,35 @@ export const sreach=async(req:Request,res:Response)=>{
         const singerName=await Singer.findOne({
             _id:item.singerId
         }).select("fullName")
-         item[`singerFullName`]=singerName[`fullName`]
+
+        //  item[`singerFullName`]=singerName[`fullName`]
+        // cannot using for fetch api
+
+         const itemFinal={
+                title:item.title,
+                avatar: item.avatar,
+                singerId: item.singerId,
+                like: item.like,
+                slug: item.slug,
+                singerFullName: singerName["fullName"],
+         }
+         songSuggest.push(itemFinal)
     }
 }
-
+    if(type=="result"){
     res.render("client/pages/songs/list",{
         pageTitle:`Result for ${keyword}`,
-        songs:song,
-    })
+        songs:songSuggest,
+    })}
+    else if(type=="suggest"){
+        res.json({
+            code:200,
+            songs:songSuggest
+        })
+    }
+    else{
+        res.json({
+            code:400
+        })
+    }
 }
