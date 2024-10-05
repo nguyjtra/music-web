@@ -210,3 +210,30 @@ export const sreach=async(req:Request,res:Response)=>{
         })
     }
 }
+
+export const listen=async(req:Request,res:Response)=>{
+    try {
+        const id=req.params.id
+        const Listen=await Song.findOne({
+            _id:id,
+            deleted:false,
+            status:"active"
+        }).select('id listen')
+
+        await Song.updateOne({
+            _id:id
+        },{
+            listen:Listen.listen+1
+        })
+        res.json({
+            code:200,
+            listen:Listen.listen+1
+        })
+    } catch (error) {
+        res.json({
+            code:400,
+            message:"error"
+        }
+        )
+    }
+}

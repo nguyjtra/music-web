@@ -22,15 +22,35 @@ if(aplayer){
     ap.on('play',function(){
         // avatar.style.animationPlayState  = "running";
         avatar2.style.animationPlayState  = "running";
+        setTimeout(() => {
+            ap.on('ended',function(){
+                // avatar.style.animationPlayState  = "paused";
+                avatar2.style.animationPlayState  = "paused";
+                fetch(`/songs/listen/${datasong._id}`)
+                    .then(res=>res.json())
+                    .then(data=>{
+                        let innerListen=document.querySelector('.singer-detail .inner-listen .inner-number')
+                        innerListen.innerHTML=data.listen
+                    })
+        
+            })
+        }, ap.audio.duration*4/5*1000);
     })
     ap.on('pause',function(){
         // avatar.style.animationPlayState  = "paused";
         avatar2.style.animationPlayState  = "paused";
     })
-    ap.on('end',function(){
-        // avatar.style.animationPlayState  = "paused";
-        avatar2.style.animationPlayState  = "paused";
-    })
+    // ap.on('ended',function(){
+    //     // avatar.style.animationPlayState  = "paused";
+    //     avatar2.style.animationPlayState  = "paused";
+    //     fetch(`/songs/listen/${datasong._id}`)
+    //         .then(res=>res.json())
+    //         .then(data=>{
+    //             let innerListen=document.querySelector('.singer-detail .inner-listen .inner-number')
+    //             innerListen.innerHTML=data.listen
+    //         })
+
+    // })
 }
 //Aplayer
 const buttonLike=document.querySelector('[button-like]')

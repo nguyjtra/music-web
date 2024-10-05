@@ -1,7 +1,7 @@
 import express,{Express,Request,Response } from "express";
 
 import dotenv from "dotenv";
-
+import {systemConfig} from "./config/system"
 var bodyParser = require('body-parser')
 
 
@@ -11,7 +11,10 @@ connectDatabase();
 
 import Topic from "./models/topic.model";
 
+
+import {routeApiAdmin} from "./routes/admin/index.route"
 import { routeApi } from "./routes/client/index.route";
+import path from "path";
 
 const app:Express=express();
 
@@ -26,9 +29,11 @@ app.use(bodyParser.json())
 
 app.use(express.static('public'))
 
-app.set("views","./views")
+app.set("views",`${__dirname}/views`)
 
 app.set("view engine","pug")
+
+app.use('/tinymce',express.static(path.join(__dirname,'node_modules','tinymce')))
 
 // app.get('/topics',async(req:Request,res:Response)=>{
 
@@ -39,9 +44,9 @@ app.set("view engine","pug")
 //     res.render('client/pages/topics/index')
 
 // })
-
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 routeApi(app)
-
+routeApiAdmin(app)
 
 app.listen(port,()=>{
     

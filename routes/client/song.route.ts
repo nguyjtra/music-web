@@ -14,4 +14,6 @@ router.get('/listFavorite',controller.listFavorite)
 
 router.get('/search/:type',controller.sreach)
 
+router.get('/listen/:id',controller.listen)
+
 export const songRoute=router
