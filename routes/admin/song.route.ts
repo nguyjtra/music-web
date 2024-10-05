@@ -8,6 +8,6 @@ router.get("/",controller.index)
 
 router.get("/create",controller.create)
 
-router.post("/create",upload.single("avatar"),uploadCoud.uploadSingle,controller.createAndSave)
+router.post("/create",upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'audio', maxCount: 1 }]),uploadCoud.uploadFields,controller.createAndSave)
 
 export const song =router
