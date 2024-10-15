@@ -38,6 +38,6 @@ export const createAndSave=async(req:Request,res:Response)=>{
     }
     const song=new Song(req.body);
     await song.save()
-    res.redirect(`/${systemConfig.prefixAdmin}`)
+    res.redirect(`/${systemConfig.prefixAdmin}/songs`)
 
 }
