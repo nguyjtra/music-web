@@ -31,4 +31,5 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const controller = __importStar(require("../../controller/admin/topic.controller"));
 router.get("/", controller.index);
+router.get('/change-status/:statusChange/:id', controller.changeStatus);
 exports.topic = router;

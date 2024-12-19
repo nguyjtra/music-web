@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAndSave = exports.create = exports.index = void 0;
+exports.editt = exports.edit = exports.createAndSave = exports.create = exports.index = void 0;
 const songs_model_1 = __importDefault(require("../../models/songs.model"));
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 const singer_model_1 = __importDefault(require("../../models/singer.model"));
@@ -53,3 +53,38 @@ const createAndSave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.redirect(`/${system_1.systemConfig.prefixAdmin}/songs`);
 });
 exports.createAndSave = createAndSave;
+const edit = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const song = yield songs_model_1.default.findOne({
+        _id: id,
+        deleted: false
+    });
+    const topic = yield topic_model_1.default.find({
+        deleted: false
+    }).select("title");
+    const singer = yield singer_model_1.default.find({
+        deleted: false
+    }).select("fullName");
+    res.render("admin/pages/song/edit", {
+        pageTitle: "Edit",
+        topics: topic,
+        singers: singer,
+        song: song
+    });
+});
+exports.edit = edit;
+const editt = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    if (req.body.avatar) {
+        req.body.avatar = req.body.avatar[0];
+    }
+    if (req.body.audio) {
+        req.body.audio = req.body.audio[0];
+    }
+    yield songs_model_1.default.updateOne({
+        _id: id,
+        deleted: false
+    }, req.body);
+    res.redirect(`/${system_1.systemConfig.prefixAdmin}/songs`);
+});
+exports.editt = editt;

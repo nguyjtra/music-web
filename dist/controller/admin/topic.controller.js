@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.index = void 0;
+exports.changeStatus = exports.index = void 0;
 const topic_model_1 = __importDefault(require("../../models/topic.model"));
 const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const topic = yield topic_model_1.default.find({
@@ -24,3 +24,13 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.index = index;
+const changeStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const topic = yield topic_model_1.default.updateOne({
+        _id: req.params.id,
+        deleted: false
+    }, {
+        status: req.params.statusChange
+    });
+    res.redirect('back');
+});
+exports.changeStatus = changeStatus;
