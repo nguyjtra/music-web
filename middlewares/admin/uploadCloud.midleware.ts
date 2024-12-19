@@ -13,7 +13,7 @@ export const uploadSingle = (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const uploadFields = async(req: Request, res: Response, next: NextFunction) => {
+export const  uploadFields = async(req: Request, res: Response, next: NextFunction) => {
   try {
     for (const key in req['files']) {
       req.body[key]=[];

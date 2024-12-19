@@ -1,9 +1,8 @@
 import express,{Express,Request,Response } from "express";
-
+import methodOverride from "method-override";
 import dotenv from "dotenv";
 import {systemConfig} from "./config/system"
 var bodyParser = require('body-parser')
-
 
 import {connectDatabase} from "./config/database"
 dotenv.config();
@@ -17,6 +16,8 @@ import { routeApi } from "./routes/client/index.route";
 import path from "path";
 
 const app:Express=express();
+
+app.use(methodOverride('_method'))
 
 const port:number|string=process.env.PORT||3000;
 

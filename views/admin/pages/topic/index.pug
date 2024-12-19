@@ -37,12 +37,12 @@ block main
                 td
                   if (item.status == "Available")
                     a(
-                      href="javascript:;"
+                      href=`/${prefixAdmin}/topics/change-status/notAvailable/${item.id}`
                       class="badge badge-success"
                     ) Active
                   else
                     a(
-                      href="javascript:;"
+                      href=`/${prefixAdmin}/topics/change-status/Available/${item.id}`
                       class="badge badge-danger"
                     ) InActive
                 td

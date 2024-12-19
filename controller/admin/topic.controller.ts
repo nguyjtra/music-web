@@ -12,3 +12,12 @@ export const index=async(req:Request,res:Response)=>{
         topics:topic
     });
 }
+export const changeStatus=async(req:Request,res:Response)=>{
+    const topic=await Topic.updateOne({
+        _id:req.params.id,
+        deleted:false
+    },{
+        status:req.params.statusChange
+    })
+    res.redirect('back');
+}

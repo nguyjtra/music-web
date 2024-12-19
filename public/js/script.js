@@ -8,11 +8,13 @@ if(aplayer){
     singer=JSON.parse(singer)
     const ap = new APlayer({
         container:aplayer,
+        lrcType:1,
         audio: [{
             name: datasong.title,
             artist: singer.fullName,
             url: datasong.audio,
-            cover: datasong.avatar
+            cover: datasong.avatar,
+            lrc: datasong.lyrics
         }],
         autoplay:true
     });

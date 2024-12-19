@@ -57,6 +57,7 @@ block main
         )
       div(
         class="form-group"
+        upload-audio
       )
         label(for="audio") Music file upload
         input(
@@ -65,7 +66,26 @@ block main
           id="audio"
           name="audio"
           accept="audio/*"
+          upload-audio-input
         )
+        audio(controls upload-audio-play)
+          soure(src="")
+      div(class="form-group")
+        label(for="lyrics") Add your Lyric 
+        textarea(
+          type="text"
+          class="form-control"
+          id="lyrics"
+          name="lyrics"
+          rows="20"
+          textarea-mce
+        ).
+          [00:00.00]Test1
+
+          [00:04.01]Test2
+
+          [00:08.02]Test3
+
       div(class="form-group")
         label(for="desc") Describe
         textarea(

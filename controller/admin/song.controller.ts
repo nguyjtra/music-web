@@ -41,3 +41,41 @@ export const createAndSave=async(req:Request,res:Response)=>{
     res.redirect(`/${systemConfig.prefixAdmin}/songs`)
 
 }
+
+export const edit=async(req:Request,res:Response)=>{
+    const id= req.params.id;
+    const song=await Song.findOne({
+        _id:id,
+        deleted:false
+    });
+    const topic=await Topic.find({
+        deleted:false
+    }).select("title");
+    const singer= await Singer.find({
+        deleted:false
+    }).select("fullName");
+    res.render("admin/pages/song/edit",{
+        pageTitle:"Edit",
+        topics:topic,
+        singers:singer,
+        song:song
+    })
+}
+
+export const editt=async(req:Request,res:Response)=>{
+    const id:string= req.params.id;
+
+    if(req.body.avatar){
+        req.body.avatar=req.body.avatar[0];
+    }
+    if(req.body.audio){
+        req.body.audio=req.body.audio[0];
+    }
+   await Song.updateOne({
+        _id:id,
+        deleted:false
+    },req.body);
+    res.redirect(`/${systemConfig.prefixAdmin}/songs`)
+    
+}
+

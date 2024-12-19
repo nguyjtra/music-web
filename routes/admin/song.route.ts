@@ -10,4 +10,9 @@ router.get("/create",controller.create)
 
 router.post("/create",upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'audio', maxCount: 1 }]),uploadCoud.uploadFields,controller.createAndSave)
 
+router.get('/edit/:id',controller.edit)
+
+router.patch("/edit/:id",upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'audio', maxCount: 1 }]),uploadCoud.uploadFields,controller.editt)
+
+
 export const song =router
