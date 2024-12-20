@@ -21,3 +21,9 @@ export const changeStatus=async(req:Request,res:Response)=>{
     })
     res.redirect('back');
 }
+// export const detail=async(req:Request,res:Response)=>{
+
+//     res.render('admin/pages/detail/index',{
+
+//     })
+// }
